@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "forms.css";
 
 @theme {
   --spacing-safe: env(safe-area-inset-bottom, 0);
@@ -28,10 +29,36 @@
       cursor: pointer;
     }
   }
+  * {
+    border-color: oklch(37.3% 0.034 259.733);
+    transform-origin: 50% 50% 0;
+  }
 }
 
 @layer components {
   .router-link-active {
     @apply bg-white/30;
+  }
+}
+
+@layer utilities {
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+  .transition-height {
+    transition: height 0.15s ease-in-out;
+  }
+
+  .slide-enter-from,
+  .slide-leave-to {
+    @apply bg-slate-800/5;
+  }
+  .slide-enter-from > .slide,
+  .slide-leave-to > .slide {
+    @apply -translate-x-full;
+  }
+  .slide-enter-from > .slide.ml-auto,
+  .slide-leave-to > .slide.ml-auto {
+    @apply translate-x-full;
   }
 }

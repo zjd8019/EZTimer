@@ -1,0 +1,55 @@
+<?xml version="1.0" standalone="no"?>
+<svg viewBox="0 0 256 256" width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+  <g>
+    <path
+      d="M128 28a100 100 0 0 1 100 100h-20a80 80 0 0 0-80-80z"
+      fill="#facc15"
+    />
+    <path
+      d="M228 128a100 100 0 0 1-100 100v-20a80 80 0 0 0 80-80z"
+      fill="#4ade80"
+    />
+    <path
+      d="M128 228a100 100 0 0 1-100-100h20a80 80 0 0 0 80 80z"
+      fill="#f87171"
+    />
+    <path
+      d="M28 128a100 100 0 0 1 100-100v20a80 80 0 0 0-80 80z"
+      fill="#22d3ee"
+    />
+  </g>
+  <g transform="translate(103.02,78) translate(4.25,0) skewX(-12) scale(.04,.04)" fill="#cbd5e1">
+    <!-- Total advance is 1249, Units per Em is 1000 -->
+    <path
+      d="M86 0V745H558V596H265V458H514V308H265V150H569V0Z"
+      transform="scale(1,-1) translate(0,-850)"
+    />
+    <path
+      d="M39 0V108L360 596H70V745H580V637L259 150H583V0Z" 
+      transform="scale(1,-1) translate(630,-850)"
+    />
+  </g>
+  <g transform="translate(63.9,118) scale(.04,.04)" fill="#D1D5DB">
+    <!-- Total advance is 3205, Units per Em is 1000 -->
+    <path
+      d="M230 0V596H29V745H611V596H409V0Z"
+      transform="scale(1,-1) translate(0,-850)"
+    />
+    <path
+      d="M86 0V745H265V0Z"
+      transform="scale(1,-1) translate(640,-850)"
+    />
+    <path
+      d="M86 0V745H279L397 423Q408 391 418.0 356.5Q428 322 438 288H443Q454 322 464.0 356.5Q474 391 484 423L598 745H792V0H629V255Q629 292 633.0 338.0Q637 384 642.5 430.5Q648 477 653 513H648L586 335L486 63H388L287 335L227 513H223Q228 477 233.0 430.5Q238 384 242.0 338.0Q246 292 246 255V0Z"
+      transform="scale(1,-1) translate(990,-850)"
+    />
+    <path
+      d="M86 0V745H558V596H265V458H514V308H265V150H569V0Z"
+      transform="scale(1,-1) translate(1867,-850)"
+    />
+    <path
+      d="M265 403H345Q409 403 442.5 430.5Q476 458 476 510Q476 563 442.5 583.0Q409 603 345 603H265ZM488 0 351 262H265V0H86V745H359Q439 745 505.0 724.0Q571 703 610.5 651.5Q650 600 650 510Q650 428 615.0 375.0Q580 322 522 295L688 0Z"
+      transform="scale(1,-1) translate(2497,-850)"
+    />
+  </g>
+</svg>

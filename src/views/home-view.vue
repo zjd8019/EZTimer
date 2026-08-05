@@ -1,17 +1,15 @@
 <script setup lang="ts">
-import { useTimerStore } from "@/stores/timer";
-import { type Step, type Workout } from "@/types";
-import {
-  computed,
-  nextTick,
-  onBeforeMount,
-  reactive,
-  ref,
-  useTemplateRef,
-} from "vue";
+import { emptyPlan, useTimerStore } from "@/stores/timer";
+import type { Step } from "@/types";
+import { computed, nextTick, onBeforeMount, reactive, ref, useTemplateRef } from "vue";
 import { Icon } from "@iconify/vue";
 import { num2Time } from "@/utils";
 import { beep } from "@/utils/sound";
+import { useMetaStore } from "@/stores/meta";
+import PlanConf from "@/components/PlanConf.vue";
+import { watchDebounced } from "@vueuse/core";
+import { useI18n } from "vue-i18n";
+import PlanList from "@/components/PlanList.vue";
 
 const COLORS = {
   PREP: "oklch(90.5% 0.182 98.111)",
@@ -27,8 +25,10 @@ const STATE = {
 
 const TICK = 250;
 const FONT_SIZE_DIFF = 80; // 8rem - 3rem;
+const { t } = useI18n();
+const meta = useMetaStore();
 const timer = useTimerStore();
-const plan = reactive({} as Workout);
+const plan = computed(() => timer.plans[timer.currentPlanIndex] || emptyPlan());
 const title = ref("");
 const steps = reactive<Step[]>([]);
 const currentStep = ref(0);
@@ -38,18 +38,7 @@ let intervalId = 0;
 const elMain = useTemplateRef("el-main");
 const bottomSpacer = ref(0);
 
-const totalDuration = computed(() =>
-  steps.reduce((acc, step) => acc + step.dura, 0),
-);
-
-function emptyPlan(): Workout {
-  return {
-    name: "",
-    prepare: 5,
-    phases: [],
-    cooldown: 30,
-  };
-}
+const totalDuration = computed(() => steps.reduce((acc, step) => acc + step.dura, 0));
 
 function makeStep(name: string, dura: number, bg: string, desc?: string) {
   return {
@@ -61,13 +50,13 @@ function makeStep(name: string, dura: number, bg: string, desc?: string) {
   } as Step;
 }
 function makePrepStep(dura: number) {
-  return makeStep("准备", dura, COLORS.PREP);
+  return makeStep(t("plan.prepare"), dura, COLORS.PREP);
 }
-function makeRestStep(dura: number) {
-  return makeStep("休息", dura, COLORS.REST);
+function makeRestStep(dura: number, intervalName: string) {
+  return makeStep(intervalName, dura, COLORS.REST);
 }
 function makeCoolStep(dura: number) {
-  return makeStep("冷却", dura, COLORS.COOL);
+  return makeStep(t("plan.cooldown"), dura, COLORS.COOL);
 }
 
 function calcSpacerHeight() {
@@ -81,41 +70,39 @@ function calcSpacerHeight() {
 }
 
 function flattenPlan() {
-  // get plan
-  const plan = timer.plans[timer.currentPlanIndex] || emptyPlan();
+  steps.length = 0;
+  if (!plan.value) return;
 
-  title.value = plan.name;
-  if (plan.prepare) {
-    steps.push(makePrepStep(plan.prepare));
+  title.value = plan.value.name;
+  if (plan.value.prepare) {
+    steps.push(makePrepStep(plan.value.prepare));
   }
 
-  if (plan.phases.length) {
-    for (let k_p = 0; k_p < plan.phases.length; k_p++) {
-      const phase = plan.phases[k_p]!;
+  if (plan.value.phases.length) {
+    for (let k_p = 0; k_p < plan.value.phases.length; k_p++) {
+      const phase = plan.value.phases[k_p]!;
       if (k_p) {
         // add interval between phases
-        steps.push(makeRestStep(phase.interval));
+        steps.push(makeRestStep(phase.interval, t("phase.interval")));
       }
       if (phase.circuits.length) {
         for (let k_p_r = 0; k_p_r < phase.repeat; k_p_r++) {
           if (k_p_r) {
-            steps.push(makeRestStep(phase.interval));
+            steps.push(makeRestStep(phase.interval, t("phase.interval")));
           }
           for (let k_c = 0; k_c < phase.circuits.length; k_c++) {
             const circuit = phase.circuits[k_c]!;
             if (k_c) {
-              steps.push(makeRestStep(phase.interval));
+              steps.push(makeRestStep(phase.interval, t("phase.interval")));
             }
             if (circuit.actions.length) {
               for (let k_c_r = 0; k_c_r < circuit.rounds; k_c_r++) {
                 if (k_c_r) {
-                  steps.push(makeRestStep(circuit.interval));
+                  steps.push(makeRestStep(circuit.interval, t("circuit.interval")));
                 }
                 for (const action of circuit.actions) {
-                  const desc = `${phase.name} ${k_p_r + 1}/${phase.repeat} 轮次 ${k_c_r + 1}/${circuit.rounds}`;
-                  steps.push(
-                    makeStep(action.name, action.duration, COLORS.ACTION, desc),
-                  );
+                  const desc = `${phase.name} ${k_p_r + 1}/${phase.repeat} ${t("circuit.rounds")} ${k_c_r + 1}/${circuit.rounds}`;
+                  steps.push(makeStep(action.name, action.duration, COLORS.ACTION, desc));
                 }
               }
             }
@@ -125,8 +112,8 @@ function flattenPlan() {
     }
   }
 
-  if (plan.cooldown) {
-    steps.push(makeCoolStep(plan.cooldown));
+  if (plan.value.cooldown) {
+    steps.push(makeCoolStep(plan.value.cooldown));
   }
 
   // strech the placeholder so that last step can scroll to the top of view
@@ -199,6 +186,14 @@ function scrollToCurrentStep(offset: number) {
   });
 }
 
+watchDebounced(
+  plan,
+  () => {
+    flattenPlan();
+  },
+  { debounce: 700, deep: true },
+);
+
 onBeforeMount(() => {
   flattenPlan();
 });
@@ -206,14 +201,18 @@ onBeforeMount(() => {
 
 <template>
   <header class="flex items-center gap-3 px-3 py-1.5 text-xl text-white">
-    <button type="button" class="p-2"><Icon icon="bi:gear" /></button>
+    <button type="button" class="p-2" @click="meta.slide = 's-conf'">
+      <Icon icon="bi:gear" />
+    </button>
     <h1 class="min-w-0 grow text-zinc-200 *:text-center">
       <div class="overflow-hidden text-2xl font-bold text-nowrap text-ellipsis">
-        {{ plan.name || "锻炼计划" }}
+        {{ plan?.name || "锻炼计划" }}
       </div>
       <div>{{ num2Time(totalDuration) }}</div>
     </h1>
-    <button type="button" class="p-2"><Icon icon="bi:list" /></button>
+    <button type="button" class="p-2" @click="meta.slide = 's-list'">
+      <Icon icon="bi:list" />
+    </button>
   </header>
 
   <main
@@ -242,9 +241,8 @@ onBeforeMount(() => {
     <div
       :style="{
         height:
-          (currentStep + 1 === steps.length
-            ? bottomSpacer - FONT_SIZE_DIFF
-            : bottomSpacer) + 'px',
+          (currentStep + 1 === steps.length ? bottomSpacer - FONT_SIZE_DIFF : bottomSpacer) +
+          'px',
       }"
     ></div>
   </main>
@@ -261,12 +259,7 @@ onBeforeMount(() => {
     >
       <Icon icon="bi:play-circle" class="text-5xl" />
     </button>
-    <button
-      type="button"
-      class="rounded-full bg-yellow-400 p-2"
-      @click="pause()"
-      v-else
-    >
+    <button type="button" class="rounded-full bg-yellow-400 p-2" @click="pause()" v-else>
       <Icon icon="bi:pause-circle" class="text-5xl" />
     </button>
     <button
@@ -281,4 +274,7 @@ onBeforeMount(() => {
       />
     </button>
   </footer>
+
+  <PlanConf />
+  <PlanList />
 </template>

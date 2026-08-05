@@ -50,6 +50,15 @@ function preset(): Workout {
   };
 }
 
+export function emptyPlan() {
+  return {
+    name: "",
+    prepare: 5,
+    phases: [],
+    cooldown: 10,
+  };
+}
+
 export const useTimerStore = defineStore("timer", () => {
   // ---- persisted state ----
   const plans = useStorage<Workout[]>("timers", [preset()]);

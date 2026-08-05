@@ -1,0 +1,200 @@
+@import "tailwindcss";
+/* @layer base: Copied from @tailwindcss/forms, with some customization */
+@layer base {
+  [type="text"],
+  input:where(:not([type])),
+  [type="email"],
+  [type="url"],
+  [type="password"],
+  [type="number"],
+  [type="date"],
+  [type="datetime-local"],
+  [type="month"],
+  [type="search"],
+  [type="tel"],
+  [type="time"],
+  [type="week"],
+  [multiple],
+  textarea,
+  select {
+    @apply appearance-none rounded-none border border-gray-600 bg-transparent px-3 py-1.5 text-base leading-normal;
+    &:focus {
+      @apply z-10 shadow-none ring ring-blue-500/50 outline-none;
+    }
+  }
+  ::-webkit-datetime-edit-fields-wrapper {
+    padding: 0px;
+  }
+  ::-webkit-date-and-time-value {
+    min-height: 1.5em;
+    text-align: inherit;
+  }
+  ::-webkit-datetime-edit {
+    display: inline-flex;
+  }
+  ::-webkit-datetime-edit,
+  ::-webkit-datetime-edit-year-field,
+  ::-webkit-datetime-edit-month-field,
+  ::-webkit-datetime-edit-day-field,
+  ::-webkit-datetime-edit-hour-field,
+  ::-webkit-datetime-edit-minute-field,
+  ::-webkit-datetime-edit-second-field,
+  ::-webkit-datetime-edit-millisecond-field,
+  ::-webkit-datetime-edit-meridiem-field {
+    padding-top: 0px;
+    padding-bottom: 0px;
+  }
+  ::-webkit-color-swatch-wrapper {
+    padding: 0; /* removes inner padding around the swatch */
+  }
+  ::-webkit-color-swatch {
+    @apply rounded-md border;
+  }
+  ::-moz-color-swatch {
+    @apply rounded-md border;
+  }
+  select {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="002020"><path stroke="%236B7280" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 8l4 4 4-4"/></svg>');
+    background-position: right 0.25em center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.25em;
+    padding-right: 2.25em;
+    print-color-adjust: exact;
+  }
+  [multiple],
+  [size]:where(select:not([size="1"])) {
+    background-image: initial;
+    background-position: initial;
+    background-repeat: unset;
+    padding-right: 0.75em;
+    print-color-adjust: unset;
+  }
+  [type="checkbox"],
+  [type="radio"] {
+    @apply inline-block size-4 shrink-0 appearance-none border border-gray-500 bg-white bg-origin-border p-0 text-blue-600 shadow-none select-none;
+    print-color-adjust: exact;
+    vertical-align: -0.125em;
+  }
+  [type="checkbox"] {
+    @apply rounded;
+  }
+  [type="radio"] {
+    border-radius: 100%;
+  }
+  [type="checkbox"]:focus,
+  [type="radio"]:focus {
+    @apply shadow-none outline-none;
+    /* outline: 2px solid transparent;
+    outline-offset: 2px; */
+    --tw-ring-inset: var(--tw-empty, /*!*/ /*!*/);
+    /* --tw-ring-offset-width: 1px;
+    --tw-ring-offset-color: #fff;
+    --tw-ring-color: theme('colors.blue.500');
+    --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width)
+      var(--tw-ring-offset-color);
+    --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width))
+      var(--tw-ring-color); */
+    /* box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow); */
+  }
+  [type="checkbox"]:disabled,
+  [type="radio"]:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  [type="checkbox"]:checked,
+  [type="radio"]:checked {
+    border-color: transparent;
+    background-color: currentColor;
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  [type="checkbox"]:checked {
+    background-image: url('data:image/svg+xml;utf8,<svg viewBox="001616" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z"/></svg>');
+    @media (forced-colors: active) {
+      appearance: auto;
+    }
+  }
+  [type="radio"]:checked {
+    background-image: url('data:image/svg+xml;utf8,<svg viewBox="001616" fill="white" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="3"/></svg>');
+    @media (forced-colors: active) {
+      appearance: auto;
+    }
+  }
+  [type="checkbox"]:checked:hover,
+  [type="checkbox"]:checked:focus,
+  [type="radio"]:checked:hover,
+  [type="radio"]:checked:focus {
+    border-color: transparent;
+    background-color: currentColor;
+  }
+  [type="checkbox"]:indeterminate {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="001616"><path stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h8"/></svg>');
+    border-color: transparent;
+    background-color: currentColor;
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    @media (forced-colors: active) {
+      appearance: auto;
+    }
+  }
+  [type="checkbox"]:indeterminate:hover,
+  [type="checkbox"]:indeterminate:focus {
+    border-color: transparent;
+    background-color: currentColor;
+  }
+  [type="file"] {
+    @apply rounded-none border border-gray-400 p-0;
+    background: unset;
+    font-size: unset;
+    line-height: inherit;
+    &::file-selector-button {
+      @apply cursor-pointer border-0 p-2;
+    }
+    &:focus {
+      @apply shadow-none ring ring-blue-500/50 outline-none;
+    }
+  }
+  ::-webkit-outer-spin-button,
+  ::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+  }
+}
+
+@layer components {
+  .form-input {
+    transition:
+      border-color 0.15s ease-in-out,
+      box-shadow 0.15s ease-in-out;
+    @apply w-full min-w-0 flex-1 rounded-xl border-gray-600 bg-gray-800 duration-200;
+    &.invalid {
+      @apply border-red-500 focus:ring-red-500/50;
+    }
+    &:disabled {
+      @apply bg-zinc-800;
+    }
+    &:is(input, textarea):read-only {
+      @apply text-zinc-500;
+    }
+    &.form-color {
+      @apply h-9.5 appearance-none p-1.5 text-base;
+    }
+    &:is(select) {
+      @apply overflow-clip;
+    }
+    &:focus {
+      @apply z-10 shadow-none ring ring-blue-500/50 outline-none;
+    }
+  }
+  .form-label {
+    @apply flex cursor-default items-center gap-1 px-3 py-1.5 text-nowrap;
+  }
+  /* Label wrapping a disabled checkbox/radio */
+  label:has([type="checkbox"]:disabled),
+  label:has([type="radio"]:disabled) {
+    cursor: not-allowed;
+  }
+}
