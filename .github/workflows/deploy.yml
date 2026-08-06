@@ -15,6 +15,7 @@ jobs:
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_KEY }}
           script: |
+            source ~/.bashrc
             cd ${{ secrets.DEPLOY_PATH }}
             git fetch origin
             git reset --hard origin/main
