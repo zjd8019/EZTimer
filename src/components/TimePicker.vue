@@ -105,38 +105,25 @@ onMounted(() => {
 </template>
 
 <style>
-.wheel-item {
-  view-timeline-name: --wheel-item;
-
-  view-timeline-axis: block;
-
-  animation:
-    wheel-opacity linear both,
-    wheel-scale linear both;
-
-  animation-timeline: --wheel-item;
-
+.group:focus .wheel-item {
+  animation: wheel-focus linear both;
+  animation-timeline: view();
   animation-range: entry 25% exit 75%;
+  animation-duration: auto; /* explicit for Safari */
+
+  /* GPU layer hints */
+  will-change: transform, opacity;
+  contain: layout style;
 }
 
-@keyframes wheel-opacity {
+@keyframes wheel-focus {
   0%,
   100% {
     opacity: 0.15;
-  }
-
-  50% {
-    opacity: 1;
-  }
-}
-
-@keyframes wheel-scale {
-  0%,
-  100% {
     transform: scale(0.5);
   }
-
   50% {
+    opacity: 1;
     transform: scale(1);
   }
 }

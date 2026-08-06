@@ -186,7 +186,7 @@
       @apply overflow-clip;
     }
     &:focus {
-      @apply z-10 shadow-none ring ring-blue-500/50 outline-none;
+      @apply z-10 shadow-none ring ring-blue-400/60 outline-none;
     }
   }
   .form-label {
