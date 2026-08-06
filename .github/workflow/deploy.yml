@@ -1,0 +1,24 @@
+name: Deploy to Cloud Server
+
+on:
+  push:
+    branches: [main]   # or master, or whatever your default branch is
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_KEY }}
+          script: |
+            cd ${{ secrets.DEPLOY_PATH }}
+            git fetch origin
+            git reset --hard origin/main
+            npm i
+            npm run build
+            # Optional: restart your service
+            # pm2 restart app || systemctl restart myapp
