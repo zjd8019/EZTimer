@@ -56,8 +56,8 @@ function delPlan(ev: MouseEvent, i: number) {
 
 <template>
   <BaseSlide id="s-list" icon="bi:list" :name="t('list')" position="right">
-    <div class="-mx-3 -my-2 flex h-[calc(100%+1rem)] w-[calc(100%+1.5rem)] flex-col border">
-      <div class="flex-1 overflow-y-auto overscroll-y-contain pt-2">
+    <div class="-mx-3 -my-2 flex h-[calc(100%+1rem)] w-[calc(100%+1.5rem)] flex-col">
+      <div class="flex-1 overflow-y-scroll overscroll-y-contain pt-2">
         <div
           class="flex scrollbar-none flex-nowrap gap-3 overflow-x-scroll p-3 pt-1"
           v-for="(plan, i) in timer.plans"
